@@ -1,10 +1,7 @@
 #!/bin/bash
 
-if [ "$(docker ps -q -f name=portainer)" ]; then
-   # cleanup
-   docker stop $(docker ps -aq)
-   docker rm $(docker ps -aq)
-fi
+# remove portainer from Exited state
+docker rm portainer
 
 # run your container
 cd /opt/TRANG/HOS-PCU
