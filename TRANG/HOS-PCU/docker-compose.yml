@@ -1,0 +1,65 @@
+version: "3.7"
+
+services:
+  nodered:
+    image: nodered:trang
+    container_name: nodered
+    environment:
+      - TZ=Asia/Bangkok
+    networks:
+      mynet:
+        ipv4_address: 10.20.30.101
+    ports:
+      - "1880:1880"
+    extra_hosts:
+      - "ssj92:203.157.230.21"
+    volumes:
+      - /opt/VOLUMES/nodered_data/:/data
+      - /opt/SCRIPTS/HOS-PCU/:/opt/SCRIPTS
+
+  mongodb:
+    image: mongodb:trang
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=trang
+      - MONGO_INITDB_ROOT_PASSWORD=datalake
+    volumes:
+      - /opt/VOLUMES/mongodb_data/:/data/db
+      - /opt/SCRIPTS/HOS-PCU/:/opt/SCRIPTS
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      mynet:
+        ipv4_address: 10.20.30.102
+    ports:
+      - "27017:27017"
+      - "27018:27018"
+      - "27019:27019"
+    extra_hosts:
+      - "ssj92:203.157.230.21"
+
+  scripts:
+    image: scripts:trang
+    container_name: scripts
+    environment:
+      - LANG=en_US.utf8
+    networks:
+      mynet:
+        ipv4_address: 10.20.30.103
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+    extra_hosts:
+      - "ssj92:203.157.230.21"
+    volumes:
+      - /opt/SCRIPTS/HOS-PCU/:/opt/API
+    # keep container running ...
+    tty: true
+      
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.20.30.0/24

@@ -1,0 +1,17 @@
+[DEFAULT] 
+enable = true 
+filter = DEFAULT 
+logpath = /var/log/secure 
+maxretry = 5 
+bantime = 3600 
+banaction = geohostsdeny 
+  
+[sshd] 
+enabled = true 
+filter = sshd 
+action = iptables[name=SSH, port=ssh, protocol=tcp] 
+logpath = /var/log/secure 
+findtime = 600 
+maxretry = 6 
+bantime = 86400 
+banaction = geohostsdeny 

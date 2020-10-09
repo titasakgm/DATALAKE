@@ -1,0 +1,53 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific environment
+PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+alias sudo='sudo '
+alias yum='sudo yum -y'
+alias dnf='sudo dnf -y'
+alias admin='su - admin'
+alias root='sudo su -'
+alias yum='sudo yum -y'
+alias ll='sudo ls -l'
+alias ng='sudo netstat -plunt | grep'
+alias nic='cd /etc/sysconfig/network-scripts'
+
+# systemctl
+alias sc='sudo systemctl'
+alias scd='sc disable'
+alias sce='sc enable'
+alias scr='sc restart'
+alias scs='sc status'
+alias scx='sc stop'
+
+# firewall-cmd
+alias fw='sudo firewall-cmd --zone=public --permanent'
+alias fw-ls='fw --list-ports'
+alias fw-add='fw --add-port'
+alias fw-rm='fw --remove-port'
+alias fwx='firewall-cmd --reload; scr firewalld'
+
+# docker stop & rm container 
+alias dx='function _f() { docker stop "$1"; docker rm "$1"; }; _f' 
+alias dst='docker stop $(docker ps -aq)' 
+alias drm='docker rm $(docker ps -aq)' 
+alias nrm='docker network prune'
+alias dkill='dst; drm; nrm'
+
+# portainer (docker) 
+alias port='docker run --name portainer \
+-p 9000:9000 \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v /opt/VOLUMES/portainer_data/:/data \
+-d portainer/portainer' 
